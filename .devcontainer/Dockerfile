@@ -1,4 +1,4 @@
-FROM openjdk:24-ea-trixie
+FROM openjdk:24-ea-oraclelinux9
 
 ARG INSTALL_MAVEN="false"
 ARG MAVEN_VERSION=""
