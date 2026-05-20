@@ -1,17 +1,21 @@
-FROM mcr.microsoft.com/devcontainers/java:3-25-trixie
+FROM openjdk:27-ea-trixie
 
 ARG INSTALL_MAVEN="false"
 ARG MAVEN_VERSION=""
 
 ARG INSTALL_GRADLE="true"
-ARG GRADLE_VERSION=""
+ARG GRADLE_VERSION="8.14"
 
-RUN if [ "${INSTALL_MAVEN}" = "true" ]; then su vscode -c "umask 0002 && . /usr/local/sdkman/bin/sdkman-init.sh && sdk install maven \"${MAVEN_VERSION}\""; fi \
-    && if [ "${INSTALL_GRADLE}" = "true" ]; then su vscode -c "umask 0002 && . /usr/local/sdkman/bin/sdkman-init.sh && sdk install gradle \"${GRADLE_VERSION}\""; fi
+RUN apt-get update && apt-get install -y curl unzip
 
-# [Optional] Uncomment this section to install additional OS packages.
-# RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-#     && apt-get -y install --no-install-recommends <your-package-list-here>
-
-# [Optional] Uncomment this line to install global node packages.
-# RUN su vscode -c "source /usr/local/share/nvm/nvm.sh && npm install -g <your-package-here>" 2>&1
+RUN if [ "${INSTALL_MAVEN}" = "true" ]; then \
+        curl -fsSL "https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz" \
+        | tar -xz -C /opt && \
+        ln -s /opt/apache-maven-${MAVEN_VERSION}/bin/mvn /usr/local/bin/mvn; \
+    fi && \
+    if [ "${INSTALL_GRADLE}" = "true" ]; then \
+        curl -fsSL "https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip" -o /tmp/gradle.zip && \
+        unzip -q /tmp/gradle.zip -d /opt && \
+        ln -s /opt/gradle-${GRADLE_VERSION}/bin/gradle /usr/local/bin/gradle && \
+        rm /tmp/gradle.zip; \
+    fi

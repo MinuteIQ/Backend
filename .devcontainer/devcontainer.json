@@ -14,10 +14,7 @@
 	"forwardPorts": [8080],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": [
-		"java -version",
-		"mkdir -p /usr/local/sdkman/candidates/java && ln -sfn $(dirname $(dirname $(readlink -f $(which java)))) /usr/local/sdkman/candidates/java/current"
-	],
+	"postCreateCommand": "java -version",
 
 	// Configure tool-specific properties.
 	"customizations": {
