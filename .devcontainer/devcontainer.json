@@ -25,7 +25,8 @@
                 "vscjava.vscode-spring-boot-dashboard",
                 "vmware.vscode-spring-boot",
                 "developersoapbox.vscode-springboot-snippets",
-                "ms-azuretools.vscode-containers"
+                "ms-azuretools.vscode-containers",
+				"vscjava.vscode-java-pack"
             ]
         }
     }

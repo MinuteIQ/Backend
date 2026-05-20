@@ -1,4 +1,4 @@
-FROM openjdk:27-ea-trixie
+FROM openjdk:24-ea-trixie
 
 ARG INSTALL_MAVEN="false"
 ARG MAVEN_VERSION=""
