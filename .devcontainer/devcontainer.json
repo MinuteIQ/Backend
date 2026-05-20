@@ -7,27 +7,40 @@
 	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
-	// "features": {}
+	// "features": {},
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// This can be used to network with other containers or with the host.
-	"forwardPorts": [8080],
+
+    "forwardPorts": [8080, 5432, 8000],
+    "portsAttributes": {
+        "8080": { "label": "Spring Boot" },
+        "5432": { "label": "PostgreSQL" },
+        "8000": { "label": "ChromaDB" }
+    },
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "java -version",
+	"postCreateCommand": "chmod +x gradlew && ./gradlew dependencies --no-daemon --quiet",
 
 	// Configure tool-specific properties.
 	"customizations": {
         "vscode": {
             "extensions": [
-                "mathiasfrohlich.Kotlin",
-                "ms-vscode.anycode-kotlin",
-                "vscjava.vscode-spring-boot-dashboard",
-                "vmware.vscode-spring-boot",
-                "developersoapbox.vscode-springboot-snippets",
-                "ms-azuretools.vscode-containers",
-				"vscjava.vscode-java-pack"
-            ]
+                "fwcd.kotlin",                              // Best full Kotlin language support
+                "vscjava.vscode-java-pack",                 // Java tooling bundle
+                "vscjava.vscode-gradle",                    // Gradle tasks panel
+                "vmware.vscode-spring-boot",                // Spring Boot language server
+                "vscjava.vscode-spring-boot-dashboard",     // Run/debug dashboard
+                "ms-azuretools.vscode-containers",          // Docker / Compose view
+                "redhat.vscode-xml",
+                "redhat.vscode-yaml"
+            ],
+            "settings": {
+                "java.jdt.ls.java.home": "/opt/java/openjdk",
+                "spring-boot.ls.java.home": "/opt/java/openjdk",
+                "editor.formatOnSave": true,
+                "editor.defaultFormatter": "fwcd.kotlin"
+            }
         }
     }
 
