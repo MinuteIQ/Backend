@@ -1,9 +1,9 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/java-postgres
 {
-	"name": "Java & PostgreSQL",
+	"name": "SpringBoot Development",
 	"dockerComposeFile": "docker-compose.yml",
-	"service": "app",
+	"service": "devcontainer",
 	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
@@ -14,10 +14,9 @@
 	"forwardPorts": [8080],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": [
-		"java -version",
-		"mkdir -p /usr/local/sdkman/candidates/java && ln -sfn $(dirname $(dirname $(readlink -f $(which java)))) /usr/local/sdkman/candidates/java/current"
-	],
+	"postCreateCommand": {
+		"app": "java -version"
+	},
 
 	// Configure tool-specific properties.
 	"customizations": {
