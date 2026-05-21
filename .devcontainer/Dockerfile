@@ -1,17 +1,23 @@
-FROM mcr.microsoft.com/devcontainers/java:3-25-trixie
+FROM eclipse-temurin:24-jdk-noble
 
-ARG INSTALL_MAVEN="false"
-ARG MAVEN_VERSION=""
+RUN apt-get update && apt-get install -y curl unzip git && rm -rf /var/lib/apt/lists/*
 
-ARG INSTALL_GRADLE="true"
-ARG GRADLE_VERSION=""
+# Install latest Gradle
+# RUN GRADLE_VERSION=$(curl -s https://services.gradle.org/versions/current \
+#         | grep -o '"version":"[^"]*"' \
+#         | cut -d'"' -f4) && \
+#     curl -fsSL "https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip" -o /tmp/gradle.zip && \
+#     unzip -q /tmp/gradle.zip -d /opt && \
+#     ln -s /opt/gradle-${GRADLE_VERSION}/bin/gradle /usr/local/bin/gradle && \
+#     rm /tmp/gradle.zip
 
-RUN if [ "${INSTALL_MAVEN}" = "true" ]; then su vscode -c "umask 0002 && . /usr/local/sdkman/bin/sdkman-init.sh && sdk install maven \"${MAVEN_VERSION}\""; fi \
-    && if [ "${INSTALL_GRADLE}" = "true" ]; then su vscode -c "umask 0002 && . /usr/local/sdkman/bin/sdkman-init.sh && sdk install gradle \"${GRADLE_VERSION}\""; fi
+# Pre-warm the Gradle dependency cache into the image layer.
+# The build context is the project root, so these files are available.
+# This means switching codespace instances won't re-download your entire dependency tree.
+WORKDIR /tmp/project
+COPY build.gradle.kts gradlew ./
+COPY gradle/ gradle/
+COPY settings.gradle* ./
+RUN chmod +x gradlew && ./gradlew dependencies --no-daemon --quiet 2>/dev/null || true
 
-# [Optional] Uncomment this section to install additional OS packages.
-# RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-#     && apt-get -y install --no-install-recommends <your-package-list-here>
-
-# [Optional] Uncomment this line to install global node packages.
-# RUN su vscode -c "source /usr/local/share/nvm/nvm.sh && npm install -g <your-package-here>" 2>&1
+WORKDIR /workspaces
