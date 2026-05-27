@@ -2,7 +2,7 @@ FROM eclipse-temurin:24-jdk-noble
 
 ARG KOTLIN_VERSION=2.2.21
 
-RUN apt-get update && apt-get install -y ca-certificates ca-certificates-java curl unzip git \
+RUN apt-get update && apt-get install -y ca-certificates-java curl unzip git \
     && update-ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
