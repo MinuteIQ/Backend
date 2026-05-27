@@ -1,6 +1,14 @@
 FROM eclipse-temurin:24-jdk-noble
 
-RUN apt-get update && apt-get install -y curl unzip git && rm -rf /var/lib/apt/lists/*
+ARG KOTLIN_VERSION=2.2.21
+
+RUN apt-get update && apt-get install -y ca-certificates curl unzip git && rm -rf /var/lib/apt/lists/*
+
+RUN curl -fsSL "https://github.com/JetBrains/kotlin/releases/download/v${KOTLIN_VERSION}/kotlin-compiler-${KOTLIN_VERSION}.zip" -o /tmp/kotlin.zip \
+    && unzip -q /tmp/kotlin.zip -d /opt \
+    && ln -s /opt/kotlinc/bin/kotlin /usr/local/bin/kotlin \
+    && ln -s /opt/kotlinc/bin/kotlinc /usr/local/bin/kotlinc \
+    && rm /tmp/kotlin.zip
 
 # Install latest Gradle
 # RUN GRADLE_VERSION=$(curl -s https://services.gradle.org/versions/current \
