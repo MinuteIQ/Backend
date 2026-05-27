@@ -3,25 +3,28 @@
 {
 	"name": "SpringBoot Development",
 	"dockerComposeFile": "docker-compose.yml",
-	"service": "devcontainer",
+	"service": "app",
 	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
-	// "features": {},
+	"features": {
+		"ghcr.io/devcontainers/features/kotlin:1": {}
+	},
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// This can be used to network with other containers or with the host.
 
-    "forwardPorts": [8080, 5432, 8000],
+    "forwardPorts": [8080, 5432, 8000, 9092],
     "portsAttributes": {
         "8080": { "label": "Spring Boot" },
         "5432": { "label": "PostgreSQL" },
-        "8000": { "label": "ChromaDB" }
+        "8000": { "label": "ChromaDB" },
+        "9092": { "label": "Kafka" }
     },
 
 	// Use 'postCreateCommand' to run commands after the container is created.
 	"postCreateCommand": {
-		"app": "java -version"
+		"app": "java -version && kotlin -version"
 	},
 
 	// Configure tool-specific properties.
