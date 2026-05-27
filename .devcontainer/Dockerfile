@@ -2,7 +2,9 @@ FROM eclipse-temurin:24-jdk-noble
 
 ARG KOTLIN_VERSION=2.2.21
 
-RUN apt-get update && apt-get install -y ca-certificates curl unzip git && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y ca-certificates ca-certificates-java curl unzip git \
+    && update-ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN curl -fsSL "https://github.com/JetBrains/kotlin/releases/download/v${KOTLIN_VERSION}/kotlin-compiler-${KOTLIN_VERSION}.zip" -o /tmp/kotlin.zip \
     && unzip -q /tmp/kotlin.zip -d /opt \
